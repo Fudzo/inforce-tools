@@ -12,6 +12,19 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        'inforce-blue': '#3172B3',
+        'inforce-blue-dark': '#224f7d',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+      },
+      animation: {
+        fadeIn: 'fadeIn 1.5s ease-in-out',
+      },
     },
   },
   plugins: [],
