@@ -6,6 +6,7 @@ import AppCard from "../components/AppCard";
 import Navbar from "../components/Navbar";
 import Filter from "../components/Filter";
 import Fullname from "../components/Fullname";
+import { Toaster, toast } from "sonner";
 
 export default async function MainPage({ userCookie }) {
 
@@ -47,7 +48,7 @@ export default async function MainPage({ userCookie }) {
 
   return (
     <div className="flex flex-wrap justify-center flex-col">
-
+      <Toaster />
       <Navbar userEmail={decodedJWT.email} firstName={user[0].first_name} lastName={user[0].last_name}/>
 
       <div className="flex flex-row">
