@@ -7,7 +7,6 @@ export async function sendEmail(receiver, otp, user = {
 }) {
 
     return new Promise((resolve, reject) => {
-        const myEmail = 'no-reply@inforcetools.store';
         let html;
         const footer = `
             <div class="footer">
@@ -95,14 +94,13 @@ ${head}
 </html>
         `
         }
-
         let transporter = nodemailer.createTransport({
-            host: 'mail.inforcetools.store',
+            host: process.env.EMAIL_HOST,
             port: 587,
             secure: false,
             auth: {
-                user: myEmail,
-                pass: 'core2quad',
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD,
             },
             tls: {
                 // Do not fail on invalid certs
@@ -111,7 +109,7 @@ ${head}
         });
 
         let mailOptions = {
-            from: `"Inforce Tools" ${myEmail}`,
+            from: `"Inforce Tools" ${process.env.EMAIL}`,
             to: receiver,
             subject: 'Inforce tools - Authentication required!',
             html: html,
