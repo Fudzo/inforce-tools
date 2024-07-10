@@ -65,7 +65,7 @@ ${head}
             <p>Hello,</p>
             <p>Your OTP is: <strong>${otp}</strong> and it is valid for 10 minutes!</p>
             <p>For the first time you log in, you will be asked to enter your First and Last name. This is a one-time requirement.</p>
-            <p>Your session will be valid for 30 days. After 30 days, you will be required to log in again using an OTP, but you will not need to enter your First and Last name again.</p>
+            <p>Your session will be valid for 30 days. After 30 days, you will be required to log in again using an OTP.</p>
             <p>If you did not request this OTP, please ignore this email.</p>
         </div>
         ${footer}

@@ -3,8 +3,8 @@
 import { useStoreActions } from "easy-peasy";
 import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
-import Modal from "./Modal";
-import OTPInput from "./Otp";
+import Modal from "../components/Modal";
+import OTPInput from "../components/Otp";
 
 export default function Login() {
 
@@ -12,23 +12,20 @@ export default function Login() {
 
   const openModal = () => setIsModalVisible(true);
   const closeModal = () => setIsModalVisible(false);
-
   const [isLoading, setIsLoading] = useState(false);
 
 
-
-  const setShowLoading = useStoreActions(action => action.setShowLoading);
   const emailRef = useRef('');
 
   async function loginUser() {
 
     const email = emailRef.current.value;
     try {
-      setIsLoading(true)
-      const res = await fetch(`/api/otpService?email=${email}`, { method: "POST" });
+        setIsLoading(true)
+      const res = await fetch(`/api/otpService?email=${email}`, { method: "POST"});
       const data = await res.json();
 
-      if (!data.success) {
+      if(!data.success) {
         toast(data.message, {
           position: 'bottom-center',
           duration: 4000
@@ -43,16 +40,16 @@ export default function Login() {
         duration: 4000
       })
     } finally {
-      setIsLoading(false)
+        setIsLoading(false)
     }
   }
 
   return (
 
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
-      <Modal isVisible={isModalVisible} onClose={closeModal}>
-        <OTPInput email={emailRef.current.value} />
-      </Modal>
+        <Modal isVisible={isModalVisible} onClose={closeModal}>
+          <OTPInput email={emailRef.current.value}/>
+        </Modal>
 
       <Toaster />
 
@@ -101,7 +98,7 @@ export default function Login() {
               Sign in
             </button> */}
 
-            <button
+<button
               type="button"
               onClick={loginUser}
               className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-inforce-blue hover:bg-inforce-blue-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-inforce-blue ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
