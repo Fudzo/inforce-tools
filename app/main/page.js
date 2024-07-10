@@ -6,7 +6,6 @@ import AppCard from "../components/AppCard";
 import Navbar from "../components/Navbar";
 import Filter from "../components/Filter";
 import Fullname from "../components/Fullname";
-import { Toaster, toast } from "sonner";
 
 export default async function MainPage({ userCookie }) {
 

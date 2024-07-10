@@ -4,10 +4,10 @@ export async function runQuery(query) {
     let connection;
     try {
         connection = await mysql.createConnection({
-            host: '127.0.0.1',
-            user: 'root',
-            password: 'core2quad',
-            database: 'inftools'
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME
         })
         const runQuery = await connection.execute(query);
         return runQuery[0];
@@ -23,4 +23,3 @@ export async function runQuery(query) {
         }
     }
 }
-
