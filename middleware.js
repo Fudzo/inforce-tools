@@ -4,7 +4,12 @@ import { jwtVerify } from 'jose';
 
 
 export async function middleware(request) {
+
+  
   const url = request.nextUrl.clone();
+  if(url.pathname === '/dashboard') {
+    return NextResponse.next();
+  }
 
   const cookieStore = cookies();
   const jwtToken = cookieStore.get('jwt_token')?.value;

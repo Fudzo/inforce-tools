@@ -12,6 +12,7 @@ export default async function MainPage({ userCookie }) {
   let user;
   let apps = [];
   let platforms = [];
+  let isAdmin;
 
   const cookieStore = cookies();
   const jwtCookie = cookieStore.get('jwt_token');
@@ -20,16 +21,13 @@ export default async function MainPage({ userCookie }) {
   let decodedJWT;
   let fullNameMissing = false;
 
-
   try {
     decodedJWT = jwt.verify(jwtCookie.value, process.env.JWT_SECRET);
     user = await runQuery(`SELECT * FROM users WHERE email = '${decodedJWT.email}'`);
     apps = await runQuery(`SELECT * FROM VW_TOOLS`);
     platforms = await runQuery(`Select * from platforms`);
+    isAdmin = user[0].role === 'ADMIN';
 
-    // console.log(decodedJWT)
-    // console.log(platforms)
-    // console.log(apps)
     if (user[0].first_name === null || user[0].last_name === null) {
       fullNameMissing = true;
     }
@@ -47,16 +45,15 @@ export default async function MainPage({ userCookie }) {
 
   return (
     <div className="flex flex-wrap justify-center flex-col">
-      <Toaster />
-      <Navbar userEmail={decodedJWT.email} firstName={user[0].first_name} lastName={user[0].last_name}/>
+      <Navbar userEmail={decodedJWT.email} firstName={user[0].first_name} lastName={user[0].last_name} isAdmin={isAdmin}/>
 
       <div className="flex flex-row">
-        <div className="flex">
+        {/* <div className="flex">
           <Filter platforms={platforms} />
-        </div>
+        </div> */}
 
         <div className="flex flex-col justify-center items-center">
-            <div className="flex items-center justify-center w-full">
+            {/* <div className="flex items-center justify-center w-full">
               <div className="bg-white p-6  min-w-full">
                 <div className="mt-1 relative rounded-md flex flex-row justify-center mb-4">
                   <input
@@ -67,14 +64,14 @@ export default async function MainPage({ userCookie }) {
                   />
                 </div>
               </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2">
             {apps.map((app, index) => {
               return (
 
-                <div>
-                  <AppCard key={index} {...app} />
+                <div key={index}>
+                  <AppCard key={index} app={app} isAdmin={isAdmin} platforms={platforms}/>
                 </div>
 
               )

@@ -34,3 +34,8 @@ body {
 
 .st0{fill:#3172B3;}
 .st1{fill:#545252;}
+
+.ql-container {
+  max-height: 300px; /* Adjust the height as needed */
+  overflow-y: auto;
+}

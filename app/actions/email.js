@@ -10,7 +10,7 @@ export async function sendEmail(receiver, otp, user = {
         let html;
         const footer = `
             <div class="footer">
-            <p>&copy; 2024 Inforce Tools. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} Inforce Tools. All rights reserved.</p>
         </div>
     `
         const head = `

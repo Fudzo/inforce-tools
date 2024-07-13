@@ -48,16 +48,19 @@ export async function POST(request, res) {
                 }
             } else {
                 const secret = authenticator.generateSecret();
-                const newUser = await runQuery(`SELECT email FROM users where email = '${email}'`);
+                const newUser = await runQuery(`SELECT first_name, last_name FROM users where email = '${email}'`);
                 const otp = generateOTP();
 
                 if (newUser.length === 0) { // if lenght is 0, it's a new user. Generate OTP SECRET key and store it in DB.
                     await runQuery(`INSERT INTO users (email, otp, otp_valid_until) VALUES ('${email}', '${otp}', DATE_ADD(NOW(), INTERVAL 10 MINUTE))`);
+                    await sendEmail(email, otp);
                 } else {
                     await runQuery(`UPDATE USERS SET otp = '${otp}', otp_valid_until =  DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE email = '${email}'`);
+                    await sendEmail(email, otp, {
+                        newUser: false,
+                        name: `${newUser[0].first_name} ${newUser[0].last_name}`
+                    });
                 }
-
-                const emailRes = await sendEmail(email, otp);
                 response = {
                     success: true,
                     message: `An OTP has been sent to ${email}`
