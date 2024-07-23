@@ -14,10 +14,10 @@ const Navbar = ({ userEmail, firstName, lastName, isAdmin }) => {
     window.location.href = '/login'
   }
 
-  console.log(firstName)
   return (
     <nav className="bg-gray-800 p-4 flex justify-between items-center">
       <div className="text-white text-xl font-bold">Inforce Tools</div>
+
       <div className="flex items-center">
         {userEmail && <div className="text-white mr-4">{firstName} {lastName} ({userEmail})</div>}
         <div className='text-white mr-4'>
@@ -25,7 +25,7 @@ const Navbar = ({ userEmail, firstName, lastName, isAdmin }) => {
         </div>
         <button
           onClick={logout}
-          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-gray-200 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded"
         >
           Logout
         </button>

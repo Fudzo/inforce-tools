@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { toast, Toaster } from 'sonner';
 import RichTextEditor from './RichTextEditor';
-import TurndownService from 'turndown';
 import HtmlParser from './HtmlParser';
 
 
@@ -11,9 +10,6 @@ const AppCard = ({ app, isAdmin, platforms }) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [moreInfo, setMoreInfo] = useState('');
-
-  const turndownService = new TurndownService()
-
 
   const openModal = () => {
     setIsOpen(true);
@@ -34,8 +30,31 @@ const AppCard = ({ app, isAdmin, platforms }) => {
   }
 
 
+  async function deleteTool(id) {
+    try {
+      const res = await fetch('/api/toolsService', {
+        method: "DELETE",
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({ id })
+      })
+      const data = res.json();
+      if(data.success) {
+        window.location.reload();
+      }
+    } catch (error) {
+      toast(error.message, {
+        position: 'bottom-center',
+        style: { width: '800px', display: 'flex', justifyContent: 'center' }
+
+      })
+    }
+  }
+
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 m-4">
+    <div className="rounded-lg p-4 m-4 bg-custom-blue bg-opacity-20 shadow-xl border border-gray-400">
 
       {isOpen && <Modal closeModal={closeModal} app={app} platforms={platforms} />}
 
@@ -48,11 +67,11 @@ const AppCard = ({ app, isAdmin, platforms }) => {
         !moreInfo ?
           <button
             onClick={() => showMoreInfo()}
-            className="px-4 py-1 my-3 bg-gray-200 text-black rounded hover:bg-gray-300 focus:outline-none" >More info
+            className="px-4 py-1 my-3 bg-gray-400 text-black rounded hover:bg-gray-500 focus:outline-none" >More info
           </button> :
           <button
             onClick={() => showMoreInfo('hide')}
-            className="px-4 py-1 my-3 bg-gray-200 text-black rounded hover:bg-gray-300 focus:outline-none">Hide More info
+            className="px-4 py-1 my-3 bg-gray-400 text-black rounded hover:bg-gray-500 focus:outline-none">Hide More info
           </button>
       }
       <div className='flex items-center justify-between'>
@@ -69,13 +88,14 @@ const AppCard = ({ app, isAdmin, platforms }) => {
           <div className='flex flex-row gap-4'>
             <button
               onClick={openModal}
-              className="px-4 py-1 my-3 bg-gray-200 text-black rounded hover:bg-gray-300 focus:outline-none"
+              className="px-4 py-1 my-3 bg-gray-400 text-black rounded hover:bg-gray-500 focus:outline-none"
             >
               Edit
             </button>
             <button
-              onClick={openModal}
-              className="px-4 py-1 my-3 bg-gray-200 text-black rounded hover:bg-gray-300 focus:outline-none"
+              id={app.id}
+              onClick={(e) => deleteTool(e.target.id)}
+              className="px-4 py-1 my-3 bg-gray-400 text-black rounded hover:bg-gray-500 focus:outline-none"
             >
               Delete
             </button>
@@ -106,18 +126,32 @@ function Modal({ closeModal, app, platforms }) {
   }
 
   async function updateTool() {
-    const res = await fetch('/api/toolsService', {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json'
-      },
-      body: JSON.stringify(tool)
-    })
-
-    const data = await res.json()
-
-    if (data.success) {
-      toast(data.message, {
+    try {
+      const res = await fetch('/api/toolsService', {
+        method: "POST",
+        headers: {
+          "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(tool)
+      })
+  
+      const data = await res.json()
+  
+      if (data.success) {
+        toast(data.message, {
+          position: 'bottom-center',
+          style: { width: '800px', display: 'flex', justifyContent: 'center' }
+  
+        })
+      } else {
+        toast(data.message, {
+          position: 'bottom-center',
+          style: { width: '800px', display: 'flex', justifyContent: 'center' }
+  
+        })
+      }
+    } catch (error) {
+      toast(error.message, {
         position: 'bottom-center',
         style: { width: '800px', display: 'flex', justifyContent: 'center' }
 
@@ -133,14 +167,14 @@ function Modal({ closeModal, app, platforms }) {
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <Toaster />
       <div className="fixed inset-0 bg-black opacity-50"></div>
-      <div className="bg-white rounded-lg p-6 z-50 w-10/12 h-10/12 flex flex-col justify-between">
+      <div className="bg-white rounded-lg p-6 z-50 w-10/12 h-11/12 flex flex-col justify-between">
         <div>
 
           <div className='flex'>
-            <label className='mr-5 w-32 text-center flex justify-center flex-col'>Tool Name</label>
+            <label className='mr-5 w-32 flex justify-center flex-col'>Tool Name</label>
             <textarea
               cols={150}
-              rows={2}
+              rows={1}
               value={tool.name}
               onChange={(e) => updateToolState(e.target.value, 'name')}
               style={textAreaStyle}
@@ -152,7 +186,7 @@ function Modal({ closeModal, app, platforms }) {
             <label className='mr-5 w-32  flex justify-center flex-col'>Description</label>
             <textarea
               cols={150}
-              rows={2}
+              rows={1}
               value={tool.description}
               onChange={(e) => updateToolState(e.target.value, 'description')}
               style={textAreaStyle}
@@ -164,7 +198,7 @@ function Modal({ closeModal, app, platforms }) {
             <label className='mr-5 w-32  flex justify-center flex-col'>Developer</label>
             <textarea
               cols={150}
-              rows={2}
+              rows={1}
               value={tool.developer}
               onChange={(e) => updateToolState(e.target.value, 'developer')}
               style={textAreaStyle}
@@ -176,7 +210,7 @@ function Modal({ closeModal, app, platforms }) {
             <label className='mr-5 w-32  flex justify-center flex-col'>Tech Stack</label>
             <textarea
               cols={150}
-              rows={2}
+              rows={1}
               value={tool.stack}
               onChange={(e) => updateToolState(e.target.value, 'stack')}
               style={textAreaStyle}
@@ -185,10 +219,34 @@ function Modal({ closeModal, app, platforms }) {
           </div>
 
           <div className='flex'>
+            <label className='mr-5 w-32  flex justify-center flex-col'>Platform</label>
+            <select 
+            defaultValue={app.platform_name}
+            onChange={(e) => updateToolState(e.target.value, 'platform_name')}
+            className='border rounded-xl mt-1 p-3'
+            >
+              {platforms.map(({platform_name}, id) => {
+                return (
+                  <option key={platform_name+id} value={platform_name}>{platform_name}</option>
+                )
+              })}
+            </select>
+
+            {/* <textarea
+              cols={150}
+              rows={1}
+              value={tool.stack}
+              onChange={(e) => updateToolState(e.target.value, 'stack')}
+              style={textAreaStyle}
+              className='border rounded-xl mt-1'
+            /> */}
+          </div>
+
+          <div className='flex'>
             <label className='mr-5 w-32  flex justify-center flex-col'>Download</label>
             <textarea
               cols={150}
-              rows={2}
+              rows={1}
               value={tool.download}
               onChange={(e) => updateToolState(e.target.value, 'download')}
               style={textAreaStyle}

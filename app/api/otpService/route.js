@@ -14,7 +14,7 @@ totp.options = {
 async function checkDomain(email = 'example@example.com') {
     try {
         const domain = email.split('@')[1].toLowerCase().trim();
-        const queryDomain = await runQuery(`Select name from allowed_domains where name = '${domain}'`)
+        const queryDomain = await runQuery(`Select lower(name) from allowed_domains where name = '${domain}'`)
         return queryDomain.length > 0
     } catch (error) {
         throw new Error(error)

@@ -15,6 +15,7 @@ module.exports = {
       colors: {
         'inforce-blue': '#3172B3',
         'inforce-blue-dark': '#224f7d',
+        'custom-blue': '#3172B3'
       },
       keyframes: {
         fadeIn: {

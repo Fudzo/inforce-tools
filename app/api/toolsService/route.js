@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 import { runQuery, updateQuery } from "@/app/actions/db";
+import { cookies } from "next/headers";
+import { jwtVerify } from 'jose';
+
+export const revalidate = 0;
 
 // Used for getting all tools
 export async function GET(request, res) {
@@ -26,16 +30,29 @@ export async function GET(request, res) {
 export async function POST(request, res) {
     
     const tool = await request.json();
-
-    // console.log(tool)
+    const cookieStore = cookies();
+    const jwtToken = cookieStore.get('jwt_token')?.value;
 
     let response;
 
     try {
+        const { payload } = await jwtVerify(jwtToken, new TextEncoder().encode(process.env.JWT_SECRET));
+        if(!payload.role.includes('ADMIN')) {
+            return NextResponse.json({
+                success: false,
+                message: 'Not authorized!'
+            })
+        }
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: 'Your session has expired, please login!'
+        })
+    }
 
-        const [{id: platformId}] = await runQuery(`Select id from platforms where platform_name = '${tool.platform_name}'`)
+    try {
 
-        console.log(tool)
+        const [{ id: platformId }] = await runQuery(`Select id from platforms where platform_name = '${tool.platform_name}'`)
 
         const updateStatement = `
         UPDATE tools SET
@@ -59,7 +76,6 @@ export async function POST(request, res) {
             tool.id
         ]
 
-        console.log(updateStatement)
         await updateQuery(updateStatement, values)
 
         response = {
@@ -76,4 +92,32 @@ export async function POST(request, res) {
     }
 
     return NextResponse.json(response)
+}
+
+
+// Used for deleting tools
+export async function DELETE(request, res) {
+    
+    const toolId = await request.json();
+    const cookieStore = cookies();
+    const jwtToken = cookieStore.get('jwt_token')?.value;
+
+    try {
+        const { payload } = await jwtVerify(jwtToken, new TextEncoder().encode(process.env.JWT_SECRET));
+        console.log(payload)
+        if(!payload.role.includes('ADMIN')) {
+            return NextResponse.json({
+                success: false,
+                message: 'Not authorized!'
+            })
+        }
+        await runQuery(`DELETE from TOOLS where id = ${toolId?.id}`)
+    } catch (error) {
+        return NextResponse.json({
+            success: false,
+            message: error.message
+        })
+    }
+
+    return NextResponse.json({ success: true })
 }
