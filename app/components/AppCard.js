@@ -5,7 +5,6 @@ import RichTextEditor from './RichTextEditor';
 import HtmlParser from './HtmlParser';
 
 
-
 const AppCard = ({ app, isAdmin, platforms }) => {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +53,7 @@ const AppCard = ({ app, isAdmin, platforms }) => {
 
 
   return (
-    <div className="rounded-lg p-4 m-4 bg-custom-blue bg-opacity-20 shadow-xl border border-gray-400">
+    <div className="card rounded-lg p-4 m-4 bg-custom-blue bg-opacity-20 shadow-xl border border-gray-400">
 
       {isOpen && <Modal closeModal={closeModal} app={app} platforms={platforms} />}
 

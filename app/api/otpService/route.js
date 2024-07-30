@@ -67,6 +67,7 @@ export async function POST(request, res) {
                 }
             }
         } catch (error) {
+            console.log(error);
             response = {
                 success: false,
                 message: 'Something went wrong!'
