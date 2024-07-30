@@ -3,14 +3,10 @@ import { cookies } from "next/headers"
 import { jwtVerify } from 'jose';
 
 
-export async function middleware(request) {
+export async function middleware(request, response) {
 
   
   const url = request.nextUrl.clone();
-  if(url.pathname === '/dashboard') {
-    return NextResponse.next();
-  }
-
   const cookieStore = cookies();
   const jwtToken = cookieStore.get('jwt_token')?.value;
 
@@ -27,11 +23,15 @@ export async function middleware(request) {
     const { payload } = await jwtVerify(jwtToken, new TextEncoder().encode(process.env.JWT_SECRET));
     console.log('---------- PATH NAME ----- ' , url.pathname, ' ---- PAYLOAD ---- ', payload)
       if(payload?.email && url.pathname !== '/main') {
+        if(!response.finished) {
+
           url.pathname = '/main';
           return NextResponse.redirect(url);
-      } else {
-        return NextResponse.next();
-      }
+        }
+      } 
+      
+      return NextResponse.next();
+
   } catch (error) {
     if(url.pathname !== '/login') {
       url.pathname = '/login';
