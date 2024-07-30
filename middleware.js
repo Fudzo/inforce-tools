@@ -24,8 +24,8 @@ export async function middleware(request) {
   } 
 
   try {
-      console.log('---------- PATH NAME ----- ' , url.pathname)
-      const { payload } = await jwtVerify(jwtToken, new TextEncoder().encode(process.env.JWT_SECRET));
+    const { payload } = await jwtVerify(jwtToken, new TextEncoder().encode(process.env.JWT_SECRET));
+    console.log('---------- PATH NAME ----- ' , url.pathname, ' ---- PAYLOAD ---- ', payload)
       if(payload && url.pathname !== '/main') {
           url.pathname = '/main';
           return NextResponse.redirect(url);
