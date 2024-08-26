@@ -35,9 +35,6 @@ export default async function MainPage({ searchParams }) {
     platforms = await runQuery(`Select * from platforms`);
     isAdmin = user[0].role === 'ADMIN';
 
-    console.log('Getting user...')
-    console.log('User is...', user)
-
     if (user[0].first_name === null || user[0].last_name === null) {
       fullNameMissing = true;
     }
