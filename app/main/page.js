@@ -43,6 +43,7 @@ export default async function MainPage({ searchParams }) {
     }
 
   } catch (error) {
+    console.log('Uslo u catch!!!', error.message)
     redirect('/login')
   }
 
