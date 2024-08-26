@@ -5,7 +5,7 @@ import { jwtVerify } from 'jose';
 
 export async function middleware(request) {
 
-
+/*
   const url = request.nextUrl.clone();
   const pathname = url.pathname;
   const cookieStore = cookies();
@@ -27,8 +27,8 @@ export async function middleware(request) {
     }
   }
 
-  return NextResponse.next();
-
+  return NextResponse.next(); 
+ */
 
   
   // const url = request.nextUrl.clone();
@@ -61,11 +61,12 @@ export async function middleware(request) {
   //   }
   // }
   // return NextResponse.next();
+  return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    // '/((?!_next/static|_next/image|favicon.ico).*)', 
+    '/((?!_next/static|_next/image|favicon.ico).*)', 
     '/main', '/:path*', '/'
   ],
 };
