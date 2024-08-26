@@ -31,7 +31,7 @@ export default async function MainPage({ searchParams }) {
   try {
     decodedJWT = jwt.verify(jwtCookie.value, process.env.JWT_SECRET);
     user      = await runQuery(`SELECT * FROM users WHERE email = '${decodedJWT.email}'`);
-    apps      = await runQuery(`SELECT * FROM VW_TOOLS`);
+    apps      = await runQuery(`SELECT * FROM vw_tools`);
     platforms = await runQuery(`Select * from platforms`);
     isAdmin = user[0].role === 'ADMIN';
 
