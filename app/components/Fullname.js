@@ -1,34 +1,48 @@
 'use client'
 import { useState } from "react";
+import LoadingSpinner from './LoadingSpinner'
 
 const Fullname = ({email}) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const res = await fetch('/api/updateName', {
-            method: "POST",
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify({
-                firstName,
-                lastName,
-                email
+        setIsLoading(true)
+        try {
+            const res = await fetch('/api/updateName', {
+                method: "POST",
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({
+                    firstName,
+                    lastName,
+                    email
+                })
             })
-        })
+    
+            const data = await res.json();
 
-        const data = await res.json();
-
-        if(data.success) {
-            window.location.reload();
+            await new Promise(res => setTimeout(res, 2000))
+    
+            if(data.success) {
+                window.location.reload();
+            }
+    
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false)
         }
-
     };
 
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded shadow-md mt-28">
+
+            <LoadingSpinner showLoading={isLoading} />
+
             <span className="flex flex-row justify-center mb-5">Please enter your first and last name.</span>
 
             <form onSubmit={handleSubmit}>

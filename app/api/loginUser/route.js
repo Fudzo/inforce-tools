@@ -30,7 +30,7 @@ export async function POST(request, res) {
     const otpValid = otp_number === otp && !otpExpired;
     await runQuery(`UPDATE users set otp = '${generateOTP()}' where email = '${email}'`);
     if (otpValid) {
-        const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: '30d', algorithm: 'HS256' });
+        const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: '180d', algorithm: 'HS256' });
         response = {
             success: true,
             message: 'User login successful',

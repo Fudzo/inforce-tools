@@ -55,7 +55,7 @@ export async function POST(request, res) {
                     await runQuery(`INSERT INTO users (email, otp, otp_valid_until) VALUES ('${email}', '${otp}', DATE_ADD(NOW(), INTERVAL 10 MINUTE))`);
                     await sendEmail(email, otp);
                 } else {
-                    await runQuery(`UPDATE USERS SET otp = '${otp}', otp_valid_until =  DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE email = '${email}'`);
+                    await runQuery(`UPDATE users SET otp = '${otp}', otp_valid_until =  DATE_ADD(NOW(), INTERVAL 10 MINUTE) WHERE email = '${email}'`);
                     await sendEmail(email, otp, {
                         newUser: false,
                         name: `${newUser[0].first_name} ${newUser[0].last_name}`

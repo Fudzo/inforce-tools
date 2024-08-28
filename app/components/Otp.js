@@ -3,7 +3,7 @@ import { Toaster, toast } from "sonner";
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
-const OTPInput = ( { email } ) => {
+const OTPInput = ( { email, setIsLoading } ) => {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const inputRefs = useRef([]);
   const router = useRouter();
@@ -46,7 +46,7 @@ const OTPInput = ( { email } ) => {
 
   const handleSubmit = async () => {
     const otpCode = otp.join('');
-    
+    setIsLoading(true)
     try {
       const loginUser = await fetch('/api/loginUser', {
         method: "POST",
@@ -67,7 +67,8 @@ const OTPInput = ( { email } ) => {
           sameSite: 'strict',
           path: '/',
         });
-        router.push('/main')
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        router.push('/tools')
       } else {
         toast(response.message, {
           position: 'bottom-center'
@@ -78,6 +79,8 @@ const OTPInput = ( { email } ) => {
       toast('Something went wrong!', {
         position: 'bottom-center'
       })
+    } finally {
+      setIsLoading(false)
     }
   };
 

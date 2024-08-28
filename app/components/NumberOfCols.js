@@ -14,7 +14,7 @@ export default function ColumnNumber({ layout }) {
             <select
                 defaultValue={layoutId}
                 onChange={(e) => {
-                    window.location.href = `/main?layout=${e.target.value}`
+                    window.location.href = `/tools?layout=${e.target.value}`
                 }}
                 className='w-16 border rounded-xl p-1 text-center'>
                 <option value='1'>1</option>

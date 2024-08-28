@@ -4,8 +4,13 @@ import { useRef, useState } from "react";
 import { Toaster, toast } from "sonner";
 import Modal from "../components/Modal";
 import OTPInput from "../components/Otp";
+import LoadingSpinner from "../components/LoadingSpinner";
+
+import SkeletonCard from '../components/SkeletonCard'
 
 export default function Login() {
+
+  // return <SkeletonCard />
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -48,12 +53,14 @@ export default function Login() {
 
     <div className="min-h-screen flex items-center justify-center bg-gray-900">
       <Modal isVisible={isModalVisible} onClose={closeModal}>
-        <OTPInput email={emailRef.current.value} />
+        <OTPInput email={emailRef.current.value} setIsLoading={setIsLoading}/>
       </Modal>
 
       <Toaster />
 
-      <div className="max-w-md w-full space-y-8 p-10 rounded-xl shadow-lg bg-gray-800">
+      <LoadingSpinner showLoading={isLoading} />
+
+      <div className="max-w-md w-full space-y-8 p-10 rounded-xl shadow-lg bg-gray-800 mb-32">
 
         <div className="flex flex-col">
           <div className="flex flex-row justify-end mr-16 text-custom-blue">

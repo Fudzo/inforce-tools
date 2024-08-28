@@ -57,7 +57,7 @@ export default async function MainPage({ searchParams }) {
 
   return (
     <div className="flex flex-wrap justify-center flex-col bg-gray-100">
-      <Navbar userEmail={decodedJWT.email} firstName={user[0].first_name} lastName={user[0].last_name} isAdmin={isAdmin} />
+      {/* <Navbar userEmail={decodedJWT.email} firstName={user[0].first_name} lastName={user[0].last_name} isAdmin={isAdmin} /> */}
 
       <ColumnNumber layout={layout}/>
 

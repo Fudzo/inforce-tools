@@ -10,7 +10,7 @@ export async function middleware(request) {
   const pathname = url.pathname;
   const cookieStore = cookies();
   const jwtToken = cookieStore.get('jwt_token')?.value;
-  const paths = ['/main', '/', '/login'];
+  const paths = ['/tools', '/', '/login'];
 
   if (paths.includes(pathname)) {
     
@@ -19,8 +19,8 @@ export async function middleware(request) {
       if (!payload?.email) {
         return NextResponse.redirect(new URL('/login', request.url));
       }
-      if (payload?.email && !pathname.includes('/main')) {
-        return NextResponse.redirect(new URL('/main', request.url));
+      if (payload?.email && !pathname.includes('/tools')) {
+        return NextResponse.redirect(new URL('/tools', request.url));
       }
     } catch (error) {
       return NextResponse.redirect(new URL('/login', request.url));
@@ -47,8 +47,8 @@ export async function middleware(request) {
   // try {
   //   const { payload } = await jwtVerify(jwtToken, new TextEncoder().encode(process.env.JWT_SECRET));
   //   console.log('---------- PATH NAME ----- ' , url.pathname, ' ---- PAYLOAD ---- ', payload)
-  //     if(payload?.email && url.pathname !== '/main') {
-  //         url.pathname = '/main';
+  //     if(payload?.email && url.pathname !== '/tools') {
+  //         url.pathname = '/tools';
   //         return NextResponse.redirect(url);
   //     } 
       
@@ -67,6 +67,6 @@ export async function middleware(request) {
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico).*)', 
-    '/main', '/:path*', '/'
+    '/tools', '/:path*', '/'
   ],
 };
